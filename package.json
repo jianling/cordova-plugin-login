@@ -1,0 +1,25 @@
+{
+  "name": "cordova-plugin-login",
+  "version": "1.0.0",
+  "description": "Cordova Login Plugin",
+  "cordova": {
+    "id": "cordova-plugin-login",
+    "platforms": [
+      "browser",
+      "ios"
+    ]
+  },
+  "keywords": [
+    "cordova",
+    "login",
+    "cordova-ios"
+  ],
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "jianling",
+  "license": "Apache 2.0"
+}
