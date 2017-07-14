@@ -21,17 +21,34 @@
 
 
 var Login = {
-    getCookie: function(url) {
-        return 'BIDUPSID=111; BAIDUID=11:FG=1; BDUSS=AAAAAA; bce-auth-type=PASSPORT; bce-user-info="2017-07-06T12:22:12Z|4314321432"; bce-login-type=PASSPORT; bce-verify-status=PASS|fdsafdsafds; bce-login-expire-time="2017-07-06T12:52:17Z|fdsafdsafdsaf"; bce-login-display-name=aaa; bce-service-type="BOS,BCC,BLB,BMR,SCS,CDN,RDS,SES,SMS|fdsafdsa"';
+    getCookie: function(success, fauilure, args) {
+        var mockupCookie = 'BIDUPSID=111; BAIDUID=11:FG=1; BDUSS=AAAAAA; bce-auth-type=PASSPORT; bce-user-info="2017-07-06T12:22:12Z|4314321432"; bce-login-type=PASSPORT; bce-verify-status=PASS|fdsafdsafds; bce-login-expire-time="2017-07-06T12:52:17Z|fdsafdsafdsaf"; bce-login-display-name=aaa; bce-service-type="BOS,BCC,BLB,BMR,SCS,CDN,RDS,SES,SMS|fdsafdsa"';
+
+        return success({
+            cookie: /localhost/.test(window.location.href) ? mockupCookie : document.cookie
+        });
     },
-    getCookieValue: function(url, cookieKey) {
-        return 'aaa';
+    getCookieValue: function(success, fauilure, args) {
+        var mockupCookie = 'BIDUPSID=111; BAIDUID=11:FG=1; BDUSS=AAAAAA; bce-auth-type=PASSPORT; bce-user-info="2017-07-06T12:22:12Z|4314321432"; bce-login-type=PASSPORT; bce-verify-status=PASS|fdsafdsafds; bce-login-expire-time="2017-07-06T12:52:17Z|fdsafdsafdsaf"; bce-login-display-name=aaa; bce-service-type="BOS,BCC,BLB,BMR,SCS,CDN,RDS,SES,SMS|fdsafdsa"';
+        var cookie = /localhost/.test(window.location.href) ? mockupCookie : document.cookie;
+        var cookieValue = '';
+        var cookies = cookie.split(';');
+        var key = args[1];
+        var reg = new RegExp('(' + key + '=|\")', 'g');
+
+        for(var i = 0; i < cookies.length; i++) {
+            if(cookies[i].indexOf(key) >= 0) {
+                cookieValue = cookies[i].replace(reg, '').trim();
+            }
+        }
+
+        return success(cookieValue);
     },
     showLoginView: function() {
-
+        window.location.href = "https://login.bce.baidu.com?redirect=" + window.location.href;
     },
     logout: function() {
-
+        window.location.href = "https://login.bce.baidu.com?redirect=https://cloud.baidu.com";
     }
 };
 
