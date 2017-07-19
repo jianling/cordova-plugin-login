@@ -52,6 +52,21 @@
 
         </platform>
 
+        <!--android -->
+        <platform name="android">
+            <config-file target="res/xml/config.xml" parent="/*">
+                <feature name="Login">
+                    <param name="android-package" value="com.baidu.Login"/>
+                </feature>
+            </config-file>
+
+            <config-file target="AndroidManifest.xml" parent="/manifest">
+                <uses-permission android:name="android.permission.INTERNET" />
+            </config-file>
+
+            <source-file src="src/android/com/baidu/Login.java" target-dir="src/com/baidu" />
+        </platform>
+
         <!-- browser -->
         <platform name="browser">
 
