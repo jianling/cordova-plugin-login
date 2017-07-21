@@ -41,6 +41,13 @@ public class PostLogin extends CordovaHttp implements Runnable {
             if (code == 302) {
                 List<String> cookies = request.getConnection().getHeaderFields().get("Set-Cookie");
 
+                List<String> location = request.getConnection().getHeaderFields().get("Location");
+
+                if (!location.get(0).contains("console.bce.baidu.com")) {
+                    this.getCallbackContext().error(response);
+                    return;
+                }
+
                 if (!cookies.isEmpty()) {
                     CookieManager cookieManager = CookieManager.getInstance();
                     for (String cookie : cookies) {
@@ -50,8 +57,6 @@ public class PostLogin extends CordovaHttp implements Runnable {
 
                 // 登录成功
                 this.getCallbackContext().success(response);
-
-                // TODO 登录失败
             }
         } catch (JSONException e) {
             this.respondWithError("There was an error generating the response");
