@@ -5,7 +5,6 @@ package com.baidu;
 
 
 import android.content.Intent;
-import android.util.Log;
 import android.webkit.CookieManager;
 
 import com.baidu.bce.LoginActivity;
@@ -34,7 +33,8 @@ public class Login extends CordovaPlugin {
     }
 
     @Override
-    public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
+    public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext)
+            throws JSONException {
         if (action.equals("showLoginView")) {
             SapiConfiguration config = new SapiConfiguration.Builder(cordova.getActivity())
                     .setProductLineInfo("bceplat", "1", "42jdt3wa1n9g4o3sk3hgtt53x0d3cr86")
@@ -59,15 +59,14 @@ public class Login extends CordovaPlugin {
                     if (intent != null) {
                         String bduss = intent.getExtras().getString("bduss");
 
-                        Log.i("bduss", bduss);
-
-                        String loginUrl = "https://login.bce.baidu.com/postlogin?_1495851167415&redirect=http%3A%2F%2Fconsole.bce.baidu.com";
+                        String loginUrl =
+                                "https://login.bce.baidu.com/postlogin?_1495851167415&redirect=http%3A%2F%2Fconsole.bce.baidu.com";
                         Map paramsMap = new HashMap<String, String>();
                         Map headersMap = new HashMap<String, String>();
 
                         headersMap.put("Cookie", "BDUSS=" + bduss + "; bce-login-type=PASSPORT;");
 
-                        CordovaHttpGet get = new CordovaHttpGet(loginUrl, paramsMap, headersMap, callbackContext);
+                        PostLogin get = new PostLogin(loginUrl, paramsMap, headersMap, callbackContext);
                         cordovaInt.getThreadPool().execute(get);
                     }
                 }
