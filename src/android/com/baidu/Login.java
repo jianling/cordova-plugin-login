@@ -20,6 +20,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +81,10 @@ public class Login extends CordovaPlugin {
 
                 String cookies = cookieManager.getCookie(url);
 
-                callbackContext.success(cookies);
+                JSONObject cookiesObject = new JSONObject();
+                cookiesObject.put("cookies", cookies);
+
+                callbackContext.success(cookiesObject);
             } catch (Exception e) {
                 callbackContext.error("");
             }
@@ -101,7 +105,10 @@ public class Login extends CordovaPlugin {
                     }
                 }
 
-                callbackContext.success(cookieValue);
+                JSONObject cookieValueObject = new JSONObject();
+                cookieValueObject.put("cookieValue", cookieValue);
+
+                callbackContext.success(cookieValueObject);
             } catch (Exception e) {
                 callbackContext.error("");
             }
