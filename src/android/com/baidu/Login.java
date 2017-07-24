@@ -82,7 +82,7 @@ public class Login extends CordovaPlugin {
                 String cookies = cookieManager.getCookie(url);
 
                 JSONObject cookiesObject = new JSONObject();
-                cookiesObject.put("cookies", cookies);
+                cookiesObject.put("cookie", cookies);
 
                 callbackContext.success(cookiesObject);
             } catch (Exception e) {

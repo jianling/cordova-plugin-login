@@ -42,7 +42,9 @@ var Login = {
             }
         }
 
-        return success(cookieValue);
+        return success({
+            cookieValue: cookieValue
+        });
     },
     showLoginView: function() {
         window.location.href = "https://login.bce.baidu.com?redirect=" + window.location.href;
