@@ -60,8 +60,41 @@
                 </feature>
             </config-file>
 
+            <config-file target="AndroidManifest.xml" parent="/manifest/application">
+                <activity
+                    android:name="com.baidu.bce.LoginActivity"
+                    android:configChanges="keyboardHidden|orientation"
+                    android:label="@string/login_activity_name"
+                    android:launchMode="singleTop"
+                    android:screenOrientation="portrait"
+                    android:theme="@style/SapiTheme">
+                </activity>
+            </config-file>
+
             <config-file target="AndroidManifest.xml" parent="/manifest">
                 <uses-permission android:name="android.permission.INTERNET" />
+                <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+                <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+                <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+                <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+                <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+                <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+                <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+                <uses-permission android:name="android.permission.RECEIVE_SMS">
+                <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+                <uses-permission android:name="android.permission.BLUETOOTH" />
+                <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+                <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+                <uses-permission android:name="android.permission.GET_TASKS" />
+                <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+                <!--扫描二维码需要的权限-->
+                <uses-permission android:name="android.permission.CAMERA" />
+                <uses-permission android:name="android.permission.VIBRATE" />
+                <uses-permission android:name="android.permission.FLASHLIGHT" />
+                <!-- 语音登录权限 -->
+                <uses-permission android:name="android.permission.RECORD_AUDIO" />
+                <!--使用短信登录、一键注册功能时需要的权限-->
+                <uses-permission android:name="android.permission.SEND_SMS" />
             </config-file>
 
             <source-file src="src/android/com/baidu/Login.java" target-dir="src/com/baidu" />
