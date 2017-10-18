@@ -34,7 +34,6 @@ public class PostLogin extends CordovaHttp implements Runnable {
             request.acceptCharset(CHARSET);
             request.headers(this.getHeaders());
             int code = request.code();
-            String body = request.body(CHARSET);
             JSONObject response = new JSONObject();
             this.addResponseHeaders(request, response);
             response.put("status", code);

@@ -6,7 +6,8 @@
     "id": "cordova-plugin-login",
     "platforms": [
       "browser",
-      "ios"
+      "ios",
+      "android"
     ]
   },
   "keywords": [

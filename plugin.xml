@@ -98,6 +98,8 @@
             </config-file>
 
             <source-file src="src/android/com/baidu/Login.java" target-dir="src/com/baidu" />
+            <source-file src="src/android/com/baidu/PostLogin.java" target-dir="src/com/baidu" />
+            <source-file src="src/android/com/baidu/Logout.java" target-dir="src/com/baidu" />
         </platform>
 
         <!-- browser -->
