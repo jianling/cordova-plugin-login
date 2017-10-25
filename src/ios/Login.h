@@ -19,7 +19,6 @@
 
 #import <Cordova/CDVPlugin.h>
 
-
 @interface Login : CDVPlugin
 
 - (void)getCookie:(CDVInvokedUrlCommand*)command;
@@ -27,6 +26,14 @@
 - (void)getCookieValue:(CDVInvokedUrlCommand*)command;
 
 - (void)showLoginView:(CDVInvokedUrlCommand*)command;
+
+- (void)showPassLoginView:(CDVInvokedUrlCommand*)command;
+
+- (void)showUCLoginView:(CDVInvokedUrlCommand*)command;
+
+- (void)ucLoginSuccess:(CDVInvokedUrlCommand*)command;
+
+- (void)popView:(CDVInvokedUrlCommand*)command;
 
 - (void)logout:(CDVInvokedUrlCommand*)command;
 

@@ -34,6 +34,18 @@ var Login = {
     showLoginView: function(success, failure) {
         return exec(success, failure, "Login", "showLoginView");
     },
+    showPassLoginView: function(success, failure) {
+        return exec(success, failure, "Login", "showPassLoginView");
+    },
+    showUCLoginView: function(success, failure) {
+        return exec(success, failure, "Login", "showUCLoginView");
+    },
+    ucLoginSuccess: function(opts, success, failure) {
+        return exec(success, failure, "Login", "ucLoginSuccess", [opts]);
+    },
+    popView: function(success, failure) {
+        return exec(success, failure, "Login", "popView");
+    },
     logout: function(success, failure) {
         return exec(success, failure, "Login", "logout");
     }

@@ -23,6 +23,7 @@
 #import "SAPILoginViewController.h"
 #import "AFHTTPSessionManager.h"
 #import "TextResponseSerializer.h"
+#import "Multiview.h"
 
 @interface Login() {
     NSString* callbackId;
@@ -86,8 +87,122 @@
 
 - (void)showLoginView:(CDVInvokedUrlCommand*)command
 {
-    SAPILoginViewController *loginVC = [[SAPILoginViewController alloc] init];
-    loginVC.hidesBottomBarWhenPushed = YES;
+    UIViewController * viewController = [[UIViewController alloc] init];
+
+    UIView* background = [[UIView alloc] initWithFrame:CGRectMake(0, 0, viewController.view.bounds.size.width, viewController.view.bounds.size.height)];
+    background.backgroundColor = [UIColor colorWithRed:0 / 255.0 green:0 / 255.0 blue:0 / 255.0 alpha:1];
+
+    CGRect viewBounds = viewController.view.bounds;
+
+    // 背景图
+    // TODO 释放缓存
+    UIImage* backgroundImage = [UIImage imageNamed:@"LaunchImage"];
+    UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, viewBounds.size.width, viewBounds.size.height)];
+    imageView.image = backgroundImage;
+    [background addSubview:imageView];
+    [viewController.view addSubview:background];
+
+    // 关闭按钮
+    UIImage* image = [UIImage imageNamed:@"CloseIcon"];
+    UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(
+                                                                  viewBounds.size.width * 0.8,
+                                                                  viewBounds.size.height * 0.1,
+                                                                  image.size.width / 2,
+                                                                  image.size.height / 2)];
+    [button setBackgroundImage:image forState:UIControlStateNormal];
+    [button addTarget:self action:@selector(popView) forControlEvents:UIControlEventTouchDown];
+    [viewController.view addSubview:button];
+
+    // 百度云账号登录按钮
+    UIButton* ucLoginBtn = [[UIButton alloc] initWithFrame:CGRectMake(
+                                                                  viewBounds.size.width * 0.1,
+                                                                  viewBounds.size.height * 0.5 - 100.f,
+                                                                  viewBounds.size.width * 0.8,
+                                                                  70.f)];
+    [ucLoginBtn setBackgroundColor:[UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:0.1]];
+    ucLoginBtn.layer.cornerRadius = ucLoginBtn.bounds.size.height / 2;
+
+    UILabel* ucLoginTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(
+                                                                           ucLoginBtn.bounds.size.width * 0.4,
+                                                                           10.f,
+                                                                           ucLoginBtn.bounds.size.width * 0.5,
+                                                                           15.f)];
+    ucLoginTitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    ucLoginTitleLabel.backgroundColor = [UIColor clearColor];
+    ucLoginTitleLabel.text = @"百度云账号";
+    ucLoginTitleLabel.textColor = [UIColor whiteColor];
+    ucLoginTitleLabel.font = [UIFont systemFontOfSize:15.f];
+    [ucLoginBtn addSubview:ucLoginTitleLabel];
+
+    UILabel* ucLoginTipLabel = [[UILabel alloc] initWithFrame:CGRectMake(
+                                                                           ucLoginBtn.bounds.size.width * 0.4,
+                                                                           45.f,
+                                                                           ucLoginBtn.bounds.size.width * 0.5,
+                                                                           15.f)];
+    ucLoginTipLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    ucLoginTipLabel.backgroundColor = [UIColor clearColor];
+    ucLoginTipLabel.text = @"原推广账号可直接登录";
+    ucLoginTipLabel.textColor = [UIColor colorWithRed:255.0 / 255.0 green:144.0 / 255.0 blue:0.0 / 255.0 alpha:1];
+    ucLoginTipLabel.font = [UIFont systemFontOfSize:13.f];
+    [ucLoginBtn addSubview:ucLoginTipLabel];
+
+    UIImage* UcLoginImage = [UIImage imageNamed:@"UcLoginIcon"];
+    UIImageView* UCLoginIconIcon = [[UIImageView alloc] initWithFrame:CGRectMake(
+                                                                                 ucLoginBtn.bounds.size.width * 0.2,
+                                                                                 ucLoginBtn.bounds.size.height * 0.2,
+                                                                                 (ucLoginBtn.bounds.size.height * 0.6) / UcLoginImage.size.height * UcLoginImage.size.width,
+                                                                                 ucLoginBtn.bounds.size.height * 0.6)];
+    UCLoginIconIcon.image = UcLoginImage;
+    [ucLoginBtn addSubview:UCLoginIconIcon];
+
+    [viewController.view addSubview:ucLoginBtn];
+    [ucLoginBtn addTarget:self action:@selector(_showUCLoginView) forControlEvents:UIControlEventTouchDown];
+
+    // 百度账号登录按钮
+    UIButton* PassLoginBtn = [[UIButton alloc] initWithFrame:CGRectMake(
+                                                                      viewBounds.size.width * 0.1,
+                                                                      viewBounds.size.height * 0.5 + 60.f,
+                                                                      viewBounds.size.width * 0.8,
+                                                                      70.f)];
+    [PassLoginBtn setBackgroundColor:[UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:0.1]];
+    PassLoginBtn.layer.cornerRadius = PassLoginBtn.bounds.size.height / 2;
+
+    UILabel* passLoginTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(
+                                                                           PassLoginBtn.bounds.size.width * 0.4,
+                                                                           10.f,
+                                                                           PassLoginBtn.bounds.size.width * 0.4,
+                                                                           15.f)];
+    passLoginTitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    passLoginTitleLabel.backgroundColor = [UIColor clearColor];
+    passLoginTitleLabel.text = @"百度账号";
+    passLoginTitleLabel.textColor = [UIColor whiteColor];
+    passLoginTitleLabel.font = [UIFont systemFontOfSize:15.f];
+    [PassLoginBtn addSubview:passLoginTitleLabel];
+
+    UILabel* passLoginTipLabel = [[UILabel alloc] initWithFrame:CGRectMake(
+                                                                         PassLoginBtn.bounds.size.width * 0.4,
+                                                                         45.f,
+                                                                         PassLoginBtn.bounds.size.width * 0.5,
+                                                                         15.f)];
+    passLoginTipLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    passLoginTipLabel.backgroundColor = [UIColor clearColor];
+    passLoginTipLabel.text = @"原百度账号可直接登录";
+    passLoginTipLabel.textColor = [UIColor colorWithRed:16.0 / 255.0 green:140.0 / 255.0 blue:238.0 / 255.0 alpha:1];
+    passLoginTipLabel.font = [UIFont systemFontOfSize:13.f];
+    [PassLoginBtn addSubview:passLoginTipLabel];
+
+    UIImage* PassLoginImage = [UIImage imageNamed:@"PassLoginIcon"];
+    UIImageView* PassLoginIconIcon = [[UIImageView alloc] initWithFrame:CGRectMake(
+                                                                                 PassLoginBtn.bounds.size.width * 0.2,
+                                                                                 PassLoginBtn.bounds.size.height * 0.2,
+                                                                                 (PassLoginBtn.bounds.size.height * 0.6) / PassLoginImage.size.height * PassLoginImage.size.width,
+                                                                                 PassLoginBtn.bounds.size.height * 0.6)];
+    PassLoginIconIcon.image = PassLoginImage;
+    [PassLoginBtn addSubview:PassLoginIconIcon];
+
+    [viewController.view addSubview:PassLoginBtn];
+    [PassLoginBtn addTarget:self action:@selector(_showPassLoginView) forControlEvents:UIControlEventTouchDown];
+
 
     if (self.viewController.navigationController == NULL) {
         UINavigationController *nav = [[UINavigationController alloc] init];
@@ -97,12 +212,136 @@
         [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
     }
 
-    [self.viewController.navigationController pushViewController:loginVC animated:YES];
+    [self.viewController.navigationController pushViewController:viewController animated:true];
+}
+
+- (void)showPassLoginView:(CDVInvokedUrlCommand*)command
+{
+    [self _showPassLoginView];
 
     callbackId = command.callbackId;
 
     [[NSNotificationCenter defaultCenter] removeObserver:self name:@"loginSuccess" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccessCallback) name:@"loginSuccess" object:nil];
+}
+
+- (void)_showPassLoginView
+{
+    SAPILoginViewController *loginVC = [[SAPILoginViewController alloc] init];
+    loginVC.hidesBottomBarWhenPushed = YES;
+
+    if (self.viewController.navigationController == NULL) {
+        UINavigationController *nav = [[UINavigationController alloc] init];
+
+        self.webView.window.rootViewController = nav;
+        [nav pushViewController:self.viewController animated:NO];
+        [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
+    }
+
+    [self.viewController.navigationController pushViewController:loginVC animated:YES];
+}
+
+- (void)showUCLoginView:(CDVInvokedUrlCommand*)command
+{
+    [self _showUCLoginView];
+
+    callbackId = command.callbackId;
+
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"loginSuccess" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccessCallback) name:@"loginSuccess" object:nil];
+}
+
+- (void)_showUCLoginView
+{
+//    在config.xml中配置登陆页地址和注册页地址
+    NSString* moduleName = @"https://login.bce.baidu.com";
+    NSString* moduleTitle = @"云账号登录";
+    NSString* moduleConfigFile = @"www/uc-login/config.xml";
+
+    ViewController *viewController = [[ViewController alloc] init];
+
+    viewController.startPage = moduleName;
+    viewController.configFile = moduleConfigFile;
+    viewController.title = moduleTitle;
+
+    [[UINavigationBar appearance] setTranslucent:NO];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:25.0 / 255.0 green:35.0 / 255.0 blue:60.0 / 255.0 alpha:1]];
+
+    UIColor *titleColor = [UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:1];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                            NSForegroundColorAttributeName: titleColor
+                                                            }];
+    viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackIcon"] style:UIBarButtonItemStylePlain target:self action:@selector(popView)];
+    [viewController.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
+
+    viewController.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"注册" style:UIBarButtonItemStylePlain target:self action:@selector(showUCRegisterPage)];
+    [viewController.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
+
+    if (self.viewController.navigationController == NULL) {
+        UINavigationController *nav = [[UINavigationController alloc] init];
+
+        self.webView.window.rootViewController = nav;
+        [nav pushViewController:self.viewController animated:NO];
+        [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
+    }
+
+    [self.viewController.navigationController pushViewController:viewController animated:YES];
+}
+
+- (void) ucLoginSuccess:(CDVInvokedUrlCommand*)command
+{
+    // 关闭登录窗口
+    [self popView];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
+
+    NSMutableDictionary * headers = [[NSMutableDictionary alloc] init];
+
+    manager.requestSerializer = [AFJSONRequestSerializer serializer];
+    [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
+    }];
+
+    manager.responseSerializer = [TextResponseSerializer serializer];
+    [manager GET:@"https://login.bce.baidu.com/postlogin?_1495851167415&redirect=http%3A%2F%2Fconsole.bce.baidu.com" parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"loginSuccess" object:nil];
+    } failure:nil];
+}
+
+- (void) showUCRegisterPage
+{
+    ViewController *viewController = [[ViewController alloc] init];
+
+    viewController.showNavigationBar = true;
+    viewController.startPage = @"/uc-login/index.html";
+    viewController.configFile = @"www/uc-login/config.xml";
+    viewController.title = @"注册";
+
+    [[UINavigationBar appearance] setTranslucent:NO];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:25.0 / 255.0 green:35.0 / 255.0 blue:60.0 / 255.0 alpha:1]];
+
+    UIColor *titleColor = [UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:1];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName: titleColor
+                                                           }];
+    viewController.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackIcon"] style:UIBarButtonItemStylePlain target:self action:@selector(popView)];
+    [viewController.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
+
+    [self.viewController.navigationController pushViewController:viewController animated:true];
+}
+
+- (void)popView:(CDVInvokedUrlCommand*)command
+{
+    [self popView];
+}
+
+- (void)popView
+{
+    [self.viewController.navigationController popViewControllerAnimated:true];
+
+//    if (self.viewController.navigationController.childViewControllers.count == 1) {
+        [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
+//    }
 }
 
 - (void)loginSuccessCallback
