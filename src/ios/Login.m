@@ -122,11 +122,12 @@
     [ucLoginBtn setBackgroundColor:[UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:0.1]];
     ucLoginBtn.layer.cornerRadius = ucLoginBtn.bounds.size.height / 2;
 
-    UILabel* ucLoginTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(
-                                                                           ucLoginBtn.bounds.size.width * 0.4,
-                                                                           10.f,
-                                                                           ucLoginBtn.bounds.size.width * 0.5,
-                                                                           15.f)];
+//    UILabel* ucLoginTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(
+//                                                                           ucLoginBtn.bounds.size.width * 0.4,
+//                                                                           15.f,
+//                                                                           ucLoginBtn.bounds.size.width * 0.5,
+//                                                                           15.f)];
+    UILabel* ucLoginTitleLabel = [[UILabel alloc] initWithFrame: CGRectZero];
     ucLoginTitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     ucLoginTitleLabel.backgroundColor = [UIColor clearColor];
     ucLoginTitleLabel.text = @"百度云账号";
@@ -134,17 +135,37 @@
     ucLoginTitleLabel.font = [UIFont systemFontOfSize:15.f];
     [ucLoginBtn addSubview:ucLoginTitleLabel];
 
-    UILabel* ucLoginTipLabel = [[UILabel alloc] initWithFrame:CGRectMake(
-                                                                           ucLoginBtn.bounds.size.width * 0.4,
-                                                                           45.f,
-                                                                           ucLoginBtn.bounds.size.width * 0.5,
-                                                                           15.f)];
+    NSLayoutConstraint* ucLoginTitleLabelTopConstraint = [NSLayoutConstraint constraintWithItem:ucLoginTitleLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:ucLoginBtn attribute:NSLayoutAttributeTop multiplier:1.0f constant:15.0f];
+    NSLayoutConstraint* ucLoginTitleLabelLeftConstraint = [NSLayoutConstraint constraintWithItem:ucLoginTitleLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:ucLoginBtn attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:-40.0f];
+    //iOS 6.0或者7.0调用addConstraints
+    //[self.view addConstraints:@[leftConstraint, rightConstraint, topConstraint, heightConstraint]];
+
+    //iOS 8.0以后设置active属性值
+    ucLoginTitleLabelTopConstraint.active = YES;
+    ucLoginTitleLabelLeftConstraint.active = YES;
+
+//    UILabel* ucLoginTipLabel = [[UILabel alloc] initWithFrame:CGRectMake(
+//                                                                           ucLoginBtn.bounds.size.width * 0.4,
+//                                                                           40.f + viewBounds.size.height * 0.5 - 100.f,
+//                                                                           ucLoginBtn.bounds.size.width * 0.5,
+//                                                                           15.f)];
+    UILabel* ucLoginTipLabel = [[UILabel alloc] initWithFrame: CGRectZero];
     ucLoginTipLabel.translatesAutoresizingMaskIntoConstraints = NO;
     ucLoginTipLabel.backgroundColor = [UIColor clearColor];
     ucLoginTipLabel.text = @"原推广账号可直接登录";
     ucLoginTipLabel.textColor = [UIColor colorWithRed:255.0 / 255.0 green:144.0 / 255.0 blue:0.0 / 255.0 alpha:1];
     ucLoginTipLabel.font = [UIFont systemFontOfSize:13.f];
     [ucLoginBtn addSubview:ucLoginTipLabel];
+
+    NSLayoutConstraint* ucLoginTipLabelTopConstraint = [NSLayoutConstraint constraintWithItem:ucLoginTipLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:ucLoginBtn attribute:NSLayoutAttributeTop multiplier:1.0f constant:40.0f];
+    NSLayoutConstraint* ucLoginTipLabelLeftConstraint = [NSLayoutConstraint constraintWithItem:ucLoginTipLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:ucLoginBtn attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:-40.0f];
+    //iOS 6.0或者7.0调用addConstraints
+    //[self.view addConstraints:@[leftConstraint, rightConstraint, topConstraint, heightConstraint]];
+
+    //iOS 8.0以后设置active属性值
+    ucLoginTipLabelTopConstraint.active = YES;
+    ucLoginTipLabelLeftConstraint.active = YES;
+
 
     UIImage* UcLoginImage = [UIImage imageNamed:@"UcLoginIcon"];
     UIImageView* UCLoginIconIcon = [[UIImageView alloc] initWithFrame:CGRectMake(
@@ -159,49 +180,69 @@
     [ucLoginBtn addTarget:self action:@selector(_showUCLoginView) forControlEvents:UIControlEventTouchDown];
 
     // 百度账号登录按钮
-    UIButton* PassLoginBtn = [[UIButton alloc] initWithFrame:CGRectMake(
+    UIButton* passLoginBtn = [[UIButton alloc] initWithFrame:CGRectMake(
                                                                       viewBounds.size.width * 0.1,
                                                                       viewBounds.size.height * 0.5 + 60.f,
                                                                       viewBounds.size.width * 0.8,
                                                                       70.f)];
-    [PassLoginBtn setBackgroundColor:[UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:0.1]];
-    PassLoginBtn.layer.cornerRadius = PassLoginBtn.bounds.size.height / 2;
+    [passLoginBtn setBackgroundColor:[UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:0.1]];
+    passLoginBtn.layer.cornerRadius = passLoginBtn.bounds.size.height / 2;
 
-    UILabel* passLoginTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(
-                                                                           PassLoginBtn.bounds.size.width * 0.4,
-                                                                           10.f,
-                                                                           PassLoginBtn.bounds.size.width * 0.4,
-                                                                           15.f)];
+//    UILabel* passLoginTitleLabel = [[UILabel alloc] initWithFrame:CGRectMake(
+//                                                                           passLoginBtn.bounds.size.width * 0.4,
+//                                                                           15.f,
+//                                                                           passLoginBtn.bounds.size.width * 0.4,
+//                                                                           15.f)];
+    UILabel* passLoginTitleLabel = [[UILabel alloc] initWithFrame: CGRectZero];
     passLoginTitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     passLoginTitleLabel.backgroundColor = [UIColor clearColor];
     passLoginTitleLabel.text = @"百度账号";
     passLoginTitleLabel.textColor = [UIColor whiteColor];
     passLoginTitleLabel.font = [UIFont systemFontOfSize:15.f];
-    [PassLoginBtn addSubview:passLoginTitleLabel];
+    [passLoginBtn addSubview:passLoginTitleLabel];
 
-    UILabel* passLoginTipLabel = [[UILabel alloc] initWithFrame:CGRectMake(
-                                                                         PassLoginBtn.bounds.size.width * 0.4,
-                                                                         45.f,
-                                                                         PassLoginBtn.bounds.size.width * 0.5,
-                                                                         15.f)];
+    NSLayoutConstraint* passLoginTitleLabelTopConstraint = [NSLayoutConstraint constraintWithItem:passLoginTitleLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:passLoginBtn attribute:NSLayoutAttributeTop multiplier:1.0f constant:15.0f];
+    NSLayoutConstraint* passLoginTitleLabelLeftConstraint = [NSLayoutConstraint constraintWithItem:passLoginTitleLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:passLoginBtn attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:-40.0f];
+    //iOS 6.0或者7.0调用addConstraints
+    //[self.view addConstraints:@[leftConstraint, rightConstraint, topConstraint, heightConstraint]];
+
+    //iOS 8.0以后设置active属性值
+    passLoginTitleLabelTopConstraint.active = YES;
+    passLoginTitleLabelLeftConstraint.active = YES;
+
+//    UILabel* passLoginTipLabel = [[UILabel alloc] initWithFrame:CGRectMake(
+//                                                                         passLoginBtn.bounds.size.width * 0.4,
+//                                                                         40.f,
+//                                                                         passLoginBtn.bounds.size.width * 0.5,
+//                                                                         15.f)];
+    UILabel* passLoginTipLabel = [[UILabel alloc] initWithFrame: CGRectZero];
     passLoginTipLabel.translatesAutoresizingMaskIntoConstraints = NO;
     passLoginTipLabel.backgroundColor = [UIColor clearColor];
     passLoginTipLabel.text = @"原百度账号可直接登录";
     passLoginTipLabel.textColor = [UIColor colorWithRed:16.0 / 255.0 green:140.0 / 255.0 blue:238.0 / 255.0 alpha:1];
     passLoginTipLabel.font = [UIFont systemFontOfSize:13.f];
-    [PassLoginBtn addSubview:passLoginTipLabel];
+    [passLoginBtn addSubview:passLoginTipLabel];
+
+    NSLayoutConstraint* passLoginTipLabelTopConstraint = [NSLayoutConstraint constraintWithItem:passLoginTipLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:passLoginBtn attribute:NSLayoutAttributeTop multiplier:1.0f constant:40.0f];
+    NSLayoutConstraint* passLoginTipLabelLeftConstraint = [NSLayoutConstraint constraintWithItem:passLoginTipLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:passLoginBtn attribute:NSLayoutAttributeCenterX multiplier:1.0f constant:-40.0f];
+    //iOS 6.0或者7.0调用addConstraints
+    //[self.view addConstraints:@[leftConstraint, rightConstraint, topConstraint, heightConstraint]];
+
+    //iOS 8.0以后设置active属性值
+    passLoginTipLabelTopConstraint.active = YES;
+    passLoginTipLabelLeftConstraint.active = YES;
 
     UIImage* PassLoginImage = [UIImage imageNamed:@"PassLoginIcon"];
     UIImageView* PassLoginIconIcon = [[UIImageView alloc] initWithFrame:CGRectMake(
-                                                                                 PassLoginBtn.bounds.size.width * 0.2,
-                                                                                 PassLoginBtn.bounds.size.height * 0.2,
-                                                                                 (PassLoginBtn.bounds.size.height * 0.6) / PassLoginImage.size.height * PassLoginImage.size.width,
-                                                                                 PassLoginBtn.bounds.size.height * 0.6)];
+                                                                                 passLoginBtn.bounds.size.width * 0.2,
+                                                                                 passLoginBtn.bounds.size.height * 0.2,
+                                                                                 (passLoginBtn.bounds.size.height * 0.6) / PassLoginImage.size.height * PassLoginImage.size.width,
+                                                                                 passLoginBtn.bounds.size.height * 0.6)];
     PassLoginIconIcon.image = PassLoginImage;
-    [PassLoginBtn addSubview:PassLoginIconIcon];
+    [passLoginBtn addSubview:PassLoginIconIcon];
 
-    [viewController.view addSubview:PassLoginBtn];
-    [PassLoginBtn addTarget:self action:@selector(_showPassLoginView) forControlEvents:UIControlEventTouchDown];
+    [viewController.view addSubview:passLoginBtn];
+    [passLoginBtn addTarget:self action:@selector(_showPassLoginView) forControlEvents:UIControlEventTouchDown];
 
 
     if (self.viewController.navigationController == NULL) {
@@ -213,6 +254,10 @@
     }
 
     [self.viewController.navigationController pushViewController:viewController animated:true];
+
+    callbackId = command.callbackId;
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"loginSuccess" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loginSuccessCallback) name:@"loginSuccess" object:nil];
 }
 
 - (void)showPassLoginView:(CDVInvokedUrlCommand*)command
@@ -346,6 +391,8 @@
 
 - (void)loginSuccessCallback
 {
+    [self.viewController.navigationController popToRootViewControllerAnimated:true];
+//    [self popView];
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@""];
 //    NSString* js = [NSString stringWithFormat:@"cordova.require('cordova/exec').nativeCallback('%@',%d,%@,%d, %d)", callbackId, YES, @"''", NO, YES];
 //    [self.webViewEngine evaluateJavaScript:js completionHandler:nil];
