@@ -25,6 +25,8 @@
 
 - (void)getCookieValue:(CDVInvokedUrlCommand*)command;
 
+- (void)showPASSQRCodeScanViewController:(CDVInvokedUrlCommand*)command;
+
 - (void)showLoginView:(CDVInvokedUrlCommand*)command;
 
 - (void)showPassLoginView:(CDVInvokedUrlCommand*)command;

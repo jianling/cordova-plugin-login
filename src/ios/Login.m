@@ -19,11 +19,12 @@
 
 #import <Cordova/CDVPlugin.h>
 #import "Login.h"
-#import "SAPIMainManager.h"
-#import "SAPILoginViewController.h"
+#import <PassportKit/SAPIMainManager.h>
+#import <PassportKit/PASSLoginViewController.h>
 #import "AFHTTPSessionManager.h"
 #import "TextResponseSerializer.h"
 #import "Multiview.h"
+#import "PASSQRCodeScanViewController.h"
 
 @interface Login() {
     NSString* callbackId;
@@ -85,9 +86,33 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void)showPASSQRCodeScanViewController:(CDVInvokedUrlCommand*)command
+{
+    if (self.viewController.navigationController == NULL) {
+        UINavigationController *nav = [[UINavigationController alloc] init];
+
+        self.webView.window.rootViewController = nav;
+        [nav pushViewController:self.viewController animated:false];
+        [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
+    }
+
+    PASSQRCodeScanViewController *qrcodeVC = [[PASSQRCodeScanViewController alloc] init];
+    qrcodeVC.hidesBottomBarWhenPushed = YES;
+    [[UINavigationBar appearance] setTranslucent:NO];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:25.0 / 255.0 green:35.0 / 255.0 blue:60.0 / 255.0 alpha:1]];
+
+    UIColor *titleColor = [UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:1];
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+                                                           NSForegroundColorAttributeName: titleColor
+                                                           }];
+    qrcodeVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"BackIcon"] style:UIBarButtonItemStylePlain target:self action:@selector(popView)];
+    [qrcodeVC.navigationItem.leftBarButtonItem setTintColor:[UIColor whiteColor]];
+    [self.viewController.navigationController pushViewController:qrcodeVC animated:YES];
+}
+
 - (void)showLoginView:(CDVInvokedUrlCommand*)command
 {
-    UIViewController * viewController = [[UIViewController alloc] init];
+    LoginViewController * viewController = [[LoginViewController alloc] init];
 
     UIView* background = [[UIView alloc] initWithFrame:CGRectMake(0, 0, viewController.view.bounds.size.width, viewController.view.bounds.size.height)];
     background.backgroundColor = [UIColor colorWithRed:0 / 255.0 green:0 / 255.0 blue:0 / 255.0 alpha:1];
@@ -250,8 +275,10 @@
 
         self.webView.window.rootViewController = nav;
         [nav pushViewController:self.viewController animated:false];
-        [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
+//        [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
     }
+
+    [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
 
     [self.viewController.navigationController pushViewController:viewController animated:true];
 
@@ -272,7 +299,7 @@
 
 - (void)_showPassLoginView
 {
-    SAPILoginViewController *loginVC = [[SAPILoginViewController alloc] init];
+    PASSLoginViewController *loginVC = [[PASSLoginViewController alloc] init];
     loginVC.hidesBottomBarWhenPushed = YES;
 
     if (self.viewController.navigationController == NULL) {
@@ -335,8 +362,6 @@
 
 - (void) ucLoginSuccess:(CDVInvokedUrlCommand*)command
 {
-    // 关闭登录窗口
-    [self popView];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
 
@@ -382,17 +407,22 @@
 
 - (void)popView
 {
-    [self.viewController.navigationController popViewControllerAnimated:true];
+    [self.viewController.navigationController popViewControllerAnimated:YES];
 
-//    if (self.viewController.navigationController.childViewControllers.count == 1) {
-        [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
-//    }
+    // 先影藏导航栏，上一个 viewcontroller 在 viewWillAppear 是会自己判断是否显示
+    [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+- (void)goToRoot
+{
+    [self.viewController.navigationController popToRootViewControllerAnimated:NO];
+    [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)loginSuccessCallback
 {
-    [self.viewController.navigationController popToRootViewControllerAnimated:true];
-//    [self popView];
+    [self goToRoot];
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@""];
 //    NSString* js = [NSString stringWithFormat:@"cordova.require('cordova/exec').nativeCallback('%@',%d,%@,%d, %d)", callbackId, YES, @"''", NO, YES];
 //    [self.webViewEngine evaluateJavaScript:js completionHandler:nil];
@@ -402,8 +432,8 @@
 
 - (void)logout:(CDVInvokedUrlCommand*)command
 {
-    SAPILoginModel *model = [SAPIMainManager sharedManager].currentLoginModel;
-    [[SAPIMainManager sharedManager].loginService logout:model];
+//    SAPILoginModel *model = [SAPIMainManager sharedManager].currentLoginModel;
+//    [[SAPIMainManager sharedManager].loginService logout:model];
 
     [self postBceLogout:command];
 }
@@ -425,3 +455,12 @@
 @end
 
 
+
+@implementation LoginViewController
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+@end

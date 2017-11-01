@@ -31,6 +31,9 @@ var Login = {
     getCookieValue: function(url, cookieKey, success, failure) {
         return exec(success, failure, "Login", "getCookieValue", [url, cookieKey]);
     },
+    showPASSQRCodeScanViewController: function(success, failure) {
+        return exec(success, failure, "Login", "showPASSQRCodeScanViewController");
+    },
     showLoginView: function(success, failure) {
         return exec(success, failure, "Login", "showLoginView");
     },
