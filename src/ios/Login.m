@@ -110,6 +110,27 @@
     [self.viewController.navigationController pushViewController:qrcodeVC animated:YES];
 }
 
+- (void)showPASSAccountRealNameViewController:(CDVInvokedUrlCommand*)command
+{
+    if (self.viewController.navigationController == NULL) {
+        UINavigationController *nav = [[UINavigationController alloc] init];
+
+        self.webView.window.rootViewController = nav;
+        [nav pushViewController:self.viewController animated:false];
+        [self.viewController.navigationController setNavigationBarHidden:YES animated:NO];
+    }
+
+    PASSAccountRealNameViewController *realNameVC = [[PASSAccountRealNameViewController alloc] init];
+    realNameVC.hidesBottomBarWhenPushed = YES;
+
+    realNameVC.finishHandler = ^(NSDictionary *userInfo) {
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@""];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    };
+
+    [self.viewController.navigationController pushViewController:realNameVC animated:YES];
+}
+
 - (void)showLoginView:(CDVInvokedUrlCommand*)command
 {
     LoginViewController * viewController = [[LoginViewController alloc] init];

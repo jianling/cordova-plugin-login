@@ -27,6 +27,8 @@
 
 - (void)showPASSQRCodeScanViewController:(CDVInvokedUrlCommand*)command;
 
+- (void)showPASSAccountRealNameViewController:(CDVInvokedUrlCommand*)command;
+
 - (void)showLoginView:(CDVInvokedUrlCommand*)command;
 
 - (void)showPassLoginView:(CDVInvokedUrlCommand*)command;
@@ -38,5 +40,10 @@
 - (void)popView:(CDVInvokedUrlCommand*)command;
 
 - (void)logout:(CDVInvokedUrlCommand*)command;
+
+@end
+
+
+@interface LoginViewController : UIViewController
 
 @end

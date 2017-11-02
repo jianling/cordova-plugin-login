@@ -34,6 +34,9 @@ var Login = {
     showPASSQRCodeScanViewController: function(success, failure) {
         return exec(success, failure, "Login", "showPASSQRCodeScanViewController");
     },
+    showPASSAccountRealNameViewController: function(success, failure) {
+        return exec(success, failure, "Login", "showPASSAccountRealNameViewController");
+    },
     showLoginView: function(success, failure) {
         return exec(success, failure, "Login", "showLoginView");
     },
