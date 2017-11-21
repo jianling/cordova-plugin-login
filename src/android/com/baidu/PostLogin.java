@@ -1,6 +1,9 @@
 package com.baidu;
 
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.webkit.CookieManager;
+import android.content.Context;
 
 import com.github.kevinsawicki.http.HttpRequest;
 import com.synconset.CordovaHttp;
@@ -20,8 +23,16 @@ import javax.net.ssl.SSLHandshakeException;
  */
 
 public class PostLogin extends CordovaHttp implements Runnable {
-    public PostLogin(String urlString, Map<?, ?> params, Map<String, String> headers, CallbackContext callbackContext) {
+    private Context cordovaContext;
+
+    public PostLogin(String urlString,
+                     Map<?, ?> params,
+                     Map<String, String> headers,
+                     CallbackContext callbackContext,
+                     Context cordovaContext) {
         super(urlString, params, headers, callbackContext);
+
+        this.cordovaContext = cordovaContext;
     }
 
     @Override
@@ -33,6 +44,21 @@ public class PostLogin extends CordovaHttp implements Runnable {
             this.setupSecurity(request);
             request.acceptCharset(CHARSET);
             request.headers(this.getHeaders());
+
+            // reset User_agent: bai du yun/1.1.0 (Google; Android 8.0.0)
+            String versionCode = "";
+            String packageName = cordovaContext.getPackageName();
+            try {
+                versionCode = cordovaContext.getPackageManager().getPackageInfo(packageName, 0).versionName;
+            } catch (PackageManager.NameNotFoundException e) {
+                // e
+            }
+
+            String agent = "bai du yun/" + versionCode
+                    + " (" + Build.MANUFACTURER + "; Android " + Build.VERSION.RELEASE + ")";
+
+            request.userAgent(agent);
+
             int code = request.code();
             JSONObject response = new JSONObject();
             this.addResponseHeaders(request, response);

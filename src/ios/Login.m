@@ -346,10 +346,10 @@
 
 - (void)_showUCLoginView
 {
-//    在config.xml中配置登陆页地址和注册页地址
+//    TODO 在config.xml中配置登陆页地址和注册页地址
     NSString* moduleName = @"https://login.bce.baidu.com";
     NSString* moduleTitle = @"云账号登录";
-    NSString* moduleConfigFile = @"www/uc-login/config.xml";
+    NSString* moduleConfigFile = @"www/uc-reg/config.xml";
 
     ViewController *viewController = [[ViewController alloc] init];
 
@@ -381,20 +381,55 @@
     [self.viewController.navigationController pushViewController:viewController animated:YES];
 }
 
+- (NSString*) getCookieOf:(NSURL *)url
+{
+    NSString *hostUrl = [NSString stringWithFormat:@"%@://%@", url.scheme, url.host];
+    __block NSString* cookieStr = @"";
+
+    if (hostUrl != nil) {
+        NSArray* cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:hostUrl]];
+
+        [cookies enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSHTTPCookie *cookie = obj;
+
+            cookieStr = [cookieStr stringByAppendingFormat:@"%@=%@; ",cookie.name,cookie.value];
+        }];
+    }
+
+    return cookieStr;
+}
+
 - (void) ucLoginSuccess:(CDVInvokedUrlCommand*)command
+{
+    NSURL * postLogin = [NSURL URLWithString:@"https://login.bce.baidu.com/postlogin?_1495851167415&redirect=http%3A%2F%2Fconsole.bce.baidu.com"];
+
+    NSString* cookieStr = [self getCookieOf:postLogin];
+
+    cookieStr = [cookieStr stringByAppendingString:@"bce-login-type=UC;"];
+
+    [self sendRequest:postLogin withCookie:cookieStr];
+}
+
+- (void) sendRequest:(NSURL*) url withCookie:(NSString*)cookie
 {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.securityPolicy = [AFSecurityPolicy policyWithPinningMode:AFSSLPinningModeNone];
 
-    NSMutableDictionary * headers = [[NSMutableDictionary alloc] init];
-
-    manager.requestSerializer = [AFJSONRequestSerializer serializer];
-    [headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
-    }];
+    [manager.requestSerializer setValue:cookie forHTTPHeaderField:@"Cookie"];
 
     manager.responseSerializer = [TextResponseSerializer serializer];
-    [manager GET:@"https://login.bce.baidu.com/postlogin?_1495851167415&redirect=http%3A%2F%2Fconsole.bce.baidu.com" parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+
+    [manager setTaskWillPerformHTTPRedirectionBlock:^NSURLRequest *(NSURLSession *session, NSURLSessionTask *task, NSURLResponse *response, NSURLRequest *request) {
+        NSURL *reqURL = request.URL;
+
+        NSString *cookieStr = [self getCookieOf:reqURL];
+
+        [self sendRequest:reqURL withCookie:cookieStr];
+
+        return nil;
+    }];
+
+    [manager GET:url.absoluteString parameters:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"loginSuccess" object:nil];
     } failure:nil];
 }
@@ -404,8 +439,8 @@
     ViewController *viewController = [[ViewController alloc] init];
 
     viewController.showNavigationBar = true;
-    viewController.startPage = @"/uc-login/index.html";
-    viewController.configFile = @"www/uc-login/config.xml";
+    viewController.startPage = @"/uc-reg/index.html";
+    viewController.configFile = @"www/uc-reg/config.xml";
     viewController.title = @"注册";
 
     [[UINavigationBar appearance] setTranslucent:NO];
@@ -465,7 +500,7 @@
 
     manager.requestSerializer = [AFJSONRequestSerializer serializer];
     manager.responseSerializer = [TextResponseSerializer serializer];
-    [manager GET:@"https://login.bce.baidu.com/logout" parameters:nil progress:nil
+    [manager GET:@"https://login.bcetest.baidu.com/logout" parameters:nil progress:nil
          success:^(NSURLSessionTask *task, id responseObject) {
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@""];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];

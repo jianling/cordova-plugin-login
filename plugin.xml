@@ -61,14 +61,14 @@
             </config-file>
 
             <config-file target="AndroidManifest.xml" parent="/manifest/application">
-                <activity
-                    android:name="com.baidu.bce.LoginActivity"
-                    android:configChanges="keyboardHidden|orientation"
-                    android:label="@string/login_activity_name"
-                    android:launchMode="singleTop"
-                    android:screenOrientation="portrait"
-                    android:theme="@style/SapiTheme">
-                </activity>
+                <activity android:name=".UcLoginActivity" />
+                <activity android:name=".LoginActivity" android:theme="@android:style/Theme.NoTitleBar" />
+                <activity android:configChanges="keyboardHidden|orientation"
+                          android:label="@string/login_activity_name"
+                          android:launchMode="singleTop"
+                          android:name=".PassLoginActivity"
+                          android:screenOrientation="portrait"
+                          android:theme="@style/SapiTheme" />
             </config-file>
 
             <config-file target="AndroidManifest.xml" parent="/manifest">
@@ -99,7 +99,9 @@
 
             <source-file src="src/android/com/baidu/Login.java" target-dir="src/com/baidu" />
             <source-file src="src/android/com/baidu/PostLogin.java" target-dir="src/com/baidu" />
-            <source-file src="src/android/com/baidu/Logout.java" target-dir="src/com/baidu" />
+            <source-file src="src/android/com/baidu/bce/LoginActivity.java" target-dir="src/com/baidu/bce" />
+            <source-file src="src/android/com/baidu/bce/PassLoginActivity.java" target-dir="src/com/baidu/bce" />
+            <source-file src="src/android/com/baidu/bce/UcLoginActivity.java" target-dir="src/com/baidu/bce" />
         </platform>
 
         <!-- browser -->
